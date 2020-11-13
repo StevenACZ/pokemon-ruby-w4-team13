@@ -70,7 +70,7 @@ class Pokemon
 
   def fainted?
     # Complete this
-    !@individual_stats[:hp].positive?
+    !@hp.positive?
   end
 
 
@@ -133,4 +133,3 @@ end
 prueba = Pokemon.new("Pikachu", 1)
 p prueba
 puts prueba.accuracy_check("rock throw")
-
