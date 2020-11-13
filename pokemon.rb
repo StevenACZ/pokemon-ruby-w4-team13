@@ -1,6 +1,7 @@
 require_relative "pokedex"
 # rubocop:disable all
 class Pokemon
+  attr_reader :stats
   include Pokedex
 
   def initialize(specie, level, name = nil)
@@ -60,8 +61,8 @@ class Pokemon
     @current_move = nil
   end
 
-  def receive_damage
-    # Complete this
+  def receive_damage(damage)
+    @hp -= damage
   end
 
   def set_current_move
@@ -131,6 +132,6 @@ class Pokemon
 end
 
 prueba = Pokemon.new("Pikachu", 1)
+
 p prueba
 puts prueba.accuracy_check("rock throw")
-
