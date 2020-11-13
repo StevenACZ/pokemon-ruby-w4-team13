@@ -1,6 +1,9 @@
 require_relative "pokedex"
 
 class Pokemon
+  attr_accessor :set_current_move
+  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :name
+  
   include Pokedex
 
   attr_reader :stats, :type, :name
@@ -62,16 +65,29 @@ class Pokemon
   end
 
   def receive_damage(damage)
-    # Complete this
+    @hp -= damage
   end
 
-  def set_current_move
-    # Complete this
+  def set_current_move(name_player, move_player)
+    # No se si debo buscar y devolver el hash completo o solo setear el valoe dentor de current_move
+=begin
+    puts "#{name_player.upcase}, select your move:"
+    count = 0
+    @moves.each { |move| print " #{count += 1}. #{move} \t\t" }
+    puts ""
+    current_move = gets.chomp.downcase
+    MOVES.each do |k|
+      current_move = k[1] if k[0] == current_move
+    end
+    p current_move
+=end
+    @current_move = move_player
   end
 
   def fainted?
-    # Complete this
+    !@hp.positive?
   end
+
 
   def attack(target)
     puts "#{@name} used #{@current_move.upcase}!"
@@ -141,7 +157,3 @@ class Pokemon
   # private methods:
   # Create here auxiliary methods
 end
-
-prueba = Pokemon.new("Pikachu", 1)
-enemy = Pokemon.new("Squirtle", 1)
-prueba.attack(enemy)
