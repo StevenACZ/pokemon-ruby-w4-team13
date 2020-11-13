@@ -1,5 +1,5 @@
 require_relative "pokedex"
-# rubocopsable all
+# rubocop:disable all
 class Pokemon
   include Pokedex
 
