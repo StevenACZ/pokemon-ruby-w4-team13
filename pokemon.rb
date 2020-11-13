@@ -19,7 +19,7 @@ class Pokemon
     @level = level
     @individual_stats = { hp: rand(32), attack: rand(32), defense: rand(32), special_attack: rand(32), special_defense: rand(32), speed: rand(32) }
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 } #variable
-    initialize_experience_points(@level)
+    @experience_points = initialize_experience_points(@level)
     @stats = { hp: calculate_hp, attack: calculate_else("attack"), defense: calculate_else("defense"), special_attack: calculate_else("special_attack"), special_defense: calculate_else("special_defense"), speed: calculate_else("speed") }
   end
 
@@ -35,16 +35,16 @@ class Pokemon
   end
 
   def initialize_experience_points(level)
-    if(level == 1)
-      @experience_points = 0
-    elsif level != 1 && @growth_rate == slow
-      @experience_points = (5 / 4.0 * @level**3).floor
-    elsif level != 1 && @growth_rate == medium_slow
-      @experience_points = (6 / 5.0 * @level**3 - 15 * @level**2 + 100 * @level -140).floor
-    elsif level != 1 && @growth_rate == medium_fast
-      @experience_points = @level**3
-    elsif level != 1 && @growth_rate == fast
-      @experience_points = (4 / 5.0 * @level**3).floor
+    if level == 1
+      return 0
+    elsif level != 1 && @growth_rate == :slow
+      return (5 / 4.0 * level**3).floor
+    elsif level != 1 && @growth_rate == :medium_slow
+      return (6 / 5.0 * level**3 - 15 * level**2 + 100 * level -140).floor
+    elsif level != 1 && @growth_rate == :medium_fast
+      return @level**3
+    elsif level != 1 && @growth_rate == :fast
+      return (4 / 5.0 * level**3).floor
     end
   end
 
@@ -147,10 +147,17 @@ class Pokemon
   end
 
   def increase_stats(target)
-    # Increase stats base on the defeated pokemon and print message "#[pokemon name] gained [amount] experience points"
-
-    # If the new experience point are enough to level up, do it and print message "#[pokemon name] reached level [level]!"
-    # -- Re-calculate the stat
+    @effort_values[target.effort_points[:type]] += target.effort_points[:amount]
+    experience_points_earned = (target.base_exp * target.level / 7.0).floor
+    puts "#{@name} gained #{experience_points_earned} experience points"
+    next_level = initialize_experience_points(@level + 1)
+    @experience_points += experience_points_earned
+    while @experience_points >= next_level
+      @level += 1
+      puts "#{@name} grew to level #{@level}!"
+      @stats = { hp: calculate_hp, attack: calculate_else("attack"), defense: calculate_else("defense"), special_attack: calculate_else("special_attack"), special_defense: calculate_else("special_defense"), speed: calculate_else("speed") }
+      next_level = initialize_experience_points(@level + 1)
+    end
   end
 
   # private methods:
