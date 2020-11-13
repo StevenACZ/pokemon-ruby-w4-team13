@@ -1,7 +1,9 @@
 require_relative "pokedex"
-# rubocop:disable all
+
 class Pokemon
-  attr_reader :stats
+  attr_accessor :set_current_move
+  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves
+  
   include Pokedex
 
   def initialize(specie, level, name = nil)
@@ -70,8 +72,7 @@ class Pokemon
   end
 
   def fainted?
-    # Complete this
-    !@individual_stats[:hp].positive?
+    !@hp.positive?
   end
 
 
@@ -131,7 +132,7 @@ class Pokemon
   # Create here auxiliary methods
 end
 
-prueba = Pokemon.new("Pikachu", 1)
+# prueba = Pokemon.new("Pikachu", 1)
 
-p prueba
-puts prueba.accuracy_check("rock throw")
+# p prueba
+# puts prueba.accuracy_check("rock throw")
