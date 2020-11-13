@@ -69,7 +69,9 @@ class Pokemon
 
   def fainted?
     # Complete this
+    !@individual_stats[:hp].positive?
   end
+
 
   def attack(target)
     # Print attack message 'Tortuguita used MOVE!'
@@ -100,3 +102,4 @@ end
 
 prueba = Pokemon.new("Pikachu", 1)
 p prueba
+
