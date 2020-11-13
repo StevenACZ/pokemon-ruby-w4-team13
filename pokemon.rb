@@ -1,10 +1,10 @@
 require_relative "pokedex"
 
 class Pokemon
-  attr_accessor :set_current_move
-  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves
-  
   include Pokedex
+
+  attr_accessor :set_current_move
+  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name
 
   def initialize(specie, level, name = nil)
     # Retrieve pokemon info from Pokedex and set instance variables
@@ -59,8 +59,7 @@ class Pokemon
   end
 
   def prepare_for_battle
-    @hp = @stats[:hp]
-    @current_move = nil
+    # Complete this
   end
 
   def receive_damage(damage)
@@ -90,22 +89,23 @@ class Pokemon
 
   def attack(target)
     puts "#{@name} used #{@current_move.upcase}!"
-    # Accuracy check
-    if accuracy_check(@current_move) # If the movement is not missed
-      #  (1) Calculate base damage
+    if accuracy_check(@current_move)
+      # (1) Calculate base damage
       damage = base_damage(target)
       # (2) Critical Hit check
-
-      # -- If critical, multiply base damage and print message 'It was CRITICAL hit!'
+      if critical_hit_check
+        damage *= 1.5
+        puts "It was CRITICAL hit!"
+      end
       # (3) Type Effectiveness
-      # -- Effectiveness check
-      # -- Mutltiply damage by effectiveness multiplier and round down. Print message if neccesary
-      # ---- "It's not very effective..." when effectivenes is less than or equal to 0.5
-      # ---- "It's super effective!" when effectivenes is greater than or equal to 1.5
-      # ---- "It doesn't affect [target name]!" when effectivenes is 0
-
-
-      # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
+      effectiveness = calculate_effectiveness_multiplier(target)
+      damage *= effectiveness
+      damage = damage.floor
+      puts "It's not very effective..." if effectiveness <= 0.5
+      puts "It's super effective!" if effectiveness >= 1.5
+      puts "It doesn't affect #{target.name}!" if effectiveness == 0
+      target.receive_damage(damage)
+      puts "And it hit #{target.name} with #{damage} damage"
     else
       puts "But it MISSED!"
     end
@@ -117,7 +117,7 @@ class Pokemon
   end
 
   def base_damage(target)
-     is_special = SPECIAL_MOVE_TYPE.include?(MOVES[@current_move][:type].to_s) || false
+     is_special = SPECIAL_MOVE_TYPE.include?(MOVES[@current_move][:type].to_sym) || false
      move_power = MOVES[@current_move][:power]
      if is_special
       offensive_stat = @stats[:special_attack]
@@ -133,6 +133,18 @@ class Pokemon
     return rand(1..16) == 7 || false
   end
 
+  def calculate_effectiveness_multiplier(target)
+    multiplier = 1
+    rounds = target.type.size
+    rounds.times do |round|
+      hash = TYPE_MULTIPLIER.find do |pair|
+        pair[:user] == MOVES[@current_move][:type] && pair[:target] == target.type[round-1]
+      end
+      multiplier *= hash[:multiplier] unless hash == nil
+    end
+    multiplier
+  end
+
   def increase_stats(target)
     # Increase stats base on the defeated pokemon and print message "#[pokemon name] gained [amount] experience points"
 
@@ -143,5 +155,3 @@ class Pokemon
   # private methods:
   # Create here auxiliary methods
 end
-
-prueba.set_current_move("carlos", "thunder shock")
