@@ -1,12 +1,10 @@
 require_relative "pokedex"
 
 class Pokemon
-  attr_accessor :set_current_move
-  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :name
-  
   include Pokedex
 
-  attr_reader :stats, :type, :name
+  attr_accessor :set_current_move
+  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name
 
   def initialize(specie, level, name = nil)
     # Retrieve pokemon info from Pokedex and set instance variables
