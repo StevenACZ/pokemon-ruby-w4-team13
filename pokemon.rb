@@ -1,5 +1,5 @@
 require_relative "pokedex"
-
+# rubocop:disable all
 class Pokemon
   include Pokedex
 
@@ -70,7 +70,9 @@ class Pokemon
 
   def fainted?
     # Complete this
+    !@individual_stats[:hp].positive?
   end
+
 
   def attack(target)
     puts "#{@name} used #{@current_move.upcase}!"
@@ -129,5 +131,6 @@ class Pokemon
 end
 
 prueba = Pokemon.new("Pikachu", 1)
+p prueba
 puts prueba.accuracy_check("rock throw")
 
