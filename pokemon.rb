@@ -1,6 +1,7 @@
 require_relative "pokedex"
 
 class Pokemon
+  attr_reader :stats
   include Pokedex
 
   def initialize(specie, level, name = nil)
@@ -59,8 +60,8 @@ class Pokemon
     # Complete this
   end
 
-  def receive_damage
-    # Complete this
+  def receive_damage(damage)
+    @stats[:hp] -= damage
   end
 
   def set_current_move
@@ -99,4 +100,6 @@ class Pokemon
 end
 
 prueba = Pokemon.new("Pikachu", 1)
-p prueba
+p prueba.stats[:hp]
+p prueba.receive_damage(2)
+p prueba.stats[:hp]
