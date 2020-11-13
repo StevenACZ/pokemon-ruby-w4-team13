@@ -59,7 +59,8 @@ class Pokemon
   end
 
   def prepare_for_battle
-    # Complete this
+    @hp = @stats[:hp]
+    @current_move = nil
   end
 
   def receive_damage(damage)
