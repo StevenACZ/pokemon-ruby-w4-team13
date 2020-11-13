@@ -73,19 +73,48 @@ class Pokemon
   end
 
   def attack(target)
-    # Print attack message 'Tortuguita used MOVE!'
+    puts "#{@name} used #{@current_move.upcase}!"
     # Accuracy check
-    # If the movement is not missed
-    # -- Calculate base damage
-    # -- Critical Hit check
-    # -- If critical, multiply base damage and print message 'It was CRITICAL hit!'
-    # -- Effectiveness check
-    # -- Mutltiply damage by effectiveness multiplier and round down. Print message if neccesary
-    # ---- "It's not very effective..." when effectivenes is less than or equal to 0.5
-    # ---- "It's super effective!" when effectivenes is greater than or equal to 1.5
-    # ---- "It doesn't affect [target name]!" when effectivenes is 0
-    # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
-    # Else, print "But it MISSED!"
+    if accuracy_check(@current_move) # If the movement is not missed
+      #  (1) Calculate base damage
+      damage = base_damage(target)
+      # (2) Critical Hit check
+
+      # -- If critical, multiply base damage and print message 'It was CRITICAL hit!'
+      # (3) Type Effectiveness
+      # -- Effectiveness check
+      # -- Mutltiply damage by effectiveness multiplier and round down. Print message if neccesary
+      # ---- "It's not very effective..." when effectivenes is less than or equal to 0.5
+      # ---- "It's super effective!" when effectivenes is greater than or equal to 1.5
+      # ---- "It doesn't affect [target name]!" when effectivenes is 0
+
+
+      # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
+    else
+      puts "But it MISSED!"
+    end
+  end
+
+  def accuracy_check(move)
+    result = rand(0..100)
+    return (0..MOVES[move][:accuracy]).to_a.include?(result) || false
+  end
+
+  def base_damage(target)
+     is_special = SPECIAL_MOVE_TYPE.include?(MOVES[@current_move][:type].to_s) || false
+     move_power = MOVES[@current_move][:power]
+     if is_special
+      offensive_stat = @stats[:special_attack]
+      defensive_stat = target.stats[:special_defense]
+     else
+      offensive_stat = @stats[:attack]
+      defensive_stat = target.stats[:defense]
+     end
+     damage = (((2 * @level / 5.0 + 2).floor * offensive_stat * move_power / defensive_stat).floor / 50.0).floor + 2
+  end
+
+  def critical_hit_check
+    return rand(1..16) == 7 || false
   end
 
   def increase_stats(target)
@@ -100,3 +129,5 @@ class Pokemon
 end
 
 prueba = Pokemon.new("Pikachu", 1)
+puts prueba.accuracy_check("rock throw")
+
