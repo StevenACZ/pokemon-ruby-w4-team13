@@ -1,5 +1,5 @@
 require_relative "pokedex"
-# rubocop:disable all
+# rubocopsable all
 class Pokemon
   include Pokedex
 
@@ -64,8 +64,20 @@ class Pokemon
     # Complete this
   end
 
-  def set_current_move
-    # Complete this
+  def set_current_move(name_player, move_player)
+    # No se si debo buscar y devolver el hash completo o solo setear el valoe dentor de current_move
+=begin
+    puts "#{name_player.upcase}, select your move:"
+    count = 0
+    @moves.each { |move| print " #{count += 1}. #{move} \t\t" }
+    puts ""
+    current_move = gets.chomp.downcase
+    MOVES.each do |k|
+      current_move = k[1] if k[0] == current_move
+    end
+    p current_move
+=end
+    @current_move = move_player
   end
 
   def fainted?
@@ -133,3 +145,4 @@ end
 prueba = Pokemon.new("Pikachu", 1)
 p prueba
 puts prueba.accuracy_check("rock throw")
+prueba.set_current_move("carlos", "thunder shock")
