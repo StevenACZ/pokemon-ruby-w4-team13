@@ -4,7 +4,7 @@ class Pokemon
   include Pokedex
 
   attr_accessor :set_current_move
-  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name
+  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name, :level, :hp, :current_move
 
   def initialize(specie, level, name = nil)
     # Retrieve pokemon info from Pokedex and set instance variables
