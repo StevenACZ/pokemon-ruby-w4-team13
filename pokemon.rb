@@ -61,7 +61,7 @@ class Pokemon
   end
 
   def receive_damage(damage)
-    @stats[:hp] -= damage
+    @hp -= damage
   end
 
   def set_current_move
