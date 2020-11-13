@@ -1,11 +1,10 @@
 require_relative "pokemon"
 
 class Player
+  attr_reader :name, :pokemon
   def initialize(name, specie, poke_name, level = 1)
     @name = name
     @pokemon = Pokemon.new(specie, level, poke_name)
-    p @pokemon
-    # p @pokemon.moves
   end
 
   def select_move

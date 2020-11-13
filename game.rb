@@ -1,6 +1,6 @@
-# require_relative "player"
-# require_relative "battle"
-# require_relative "pokedex"
+require_relative "player"
+require_relative "battle"
+require_relative "pokedex"
 require "colorize"
 
 class Game
@@ -25,11 +25,11 @@ Here, #{name.capitalize} There are #{c('3', :green)}   #{c('POKEMON', :light_yel
 When #{c('I', :blue)} was young, #{c('I', :blue)} was a serious  #{c('POKEMON', :light_yellow)} trainer.
 In my old age, #{c('I', :blue)} have only #{c('3', :green)}  left, but you can have one#{c('!', :blue)} Choose#{c('!', :blue)}\n\n"
     puts "#{c('1.', :green)}Bulbasaur    #{c('2.', :green)}Charmander   #{c('3.', :green)}Squirtle\n"
-    pokemon = "charmander" # gets.c"homp.downcase
-    until check_initial_pokemon(pokemon)
-      puts "#{c('1.', :green)}Bulbasaur    #{c('2.', :green)}Charmander   #{c('3.', :green)}Squirtle\n"
-      pokemon = gets.chomp.downcase
-    end
+    pokemon = "Charmander" # gets.c"homp.downcase
+    # until check_initial_pokemon(pokemon)
+    #   puts "#{c('1.', :green)}Bulbasaur    #{c('2.', :green)}Charmander   #{c('3.', :green)}Squirtle\n"
+    #   pokemon = gets.chomp.downcase
+    # end
     puts "You selected #{c(pokemon.upcase, :light_yellow)}. Great choice#{c('!', :blue)}
 Give your pokemon a name#{c('?', :blue)}"
     pokemon_name = "Char" # gets.chomp
@@ -42,7 +42,8 @@ When you feel ready you can challenge #{c('BROCK', :light_yellow)}, the #{c('PEW
 
   def start
     player = welcome
-    p player
+    @player = Player.new(player[0], player[1], player[2])
+    @pokemon = @player.pokemon
     # Then create a Player with that information and store it in @player
     # @player = Player.new(player[0], player[1], player[2])
     action = menu
@@ -74,8 +75,20 @@ When you feel ready you can challenge #{c('BROCK', :light_yellow)}, the #{c('PEW
   end
 
   def show_stats
-    # Compelte this
-    puts "Como vas"
+    p @pokemon
+    puts "#{@pokemon.name}:"
+    puts "Kind: #{@pokemon.specie}"
+    puts "Level: #{@pokemon.level}"
+    puts "Type: " + @pokemon.type.join("")
+    puts "Stats:"
+    puts "HP: #{@pokemon.stats[:hp]}"
+    puts "Attack: #{@pokemon.stats[:attack]}"
+    puts "Defense: #{@pokemon.stats[:defense]}"
+    puts "Special Attack: #{@pokemon.stats[:special_attack]}"
+    puts "Special Defense: #{@pokemon.stats[:special_defense]}"
+    puts "Speed: #{@pokemon.stats[:speed]}"
+    puts "Experience Points: #{@pokemon.base_exp}"
+
   end
 
   def goodbye

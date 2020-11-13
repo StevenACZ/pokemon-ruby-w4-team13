@@ -4,7 +4,7 @@ class Pokemon
   include Pokedex
 
   attr_accessor :set_current_move
-  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name
+  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name, :level, :hp, :current_move
 
   def initialize(specie, level, name = nil)
     # Retrieve pokemon info from Pokedex and set instance variables
@@ -37,13 +37,13 @@ class Pokemon
   def initialize_experience_points(level)
     if(level == 1)
       @experience_points = 0
-    elsif level != 1 && @growth_rate == slow
+    elsif level != 1 && @growth_rate.to_s == "slow"
       @experience_points = (5 / 4.0 * @level**3).floor
-    elsif level != 1 && @growth_rate == medium_slow
+    elsif level != 1 && @growth_rate.to_s == "medium_slow"
       @experience_points = (6 / 5.0 * @level**3 - 15 * @level**2 + 100 * @level -140).floor
-    elsif level != 1 && @growth_rate == medium_fast
+    elsif level != 1 && @growth_rate.to_s == "medium_fast"
       @experience_points = @level**3
-    elsif level != 1 && @growth_rate == fast
+    elsif level != 1 && @growth_rate.to_s == "fast"
       @experience_points = (4 / 5.0 * @level**3).floor
     end
   end
