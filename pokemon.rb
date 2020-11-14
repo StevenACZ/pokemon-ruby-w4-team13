@@ -3,8 +3,8 @@ require_relative "pokedex"
 class Pokemon
   include Pokedex
 
-  attr_accessor :set_current_move
-  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name, :level, :hp, :current_move
+  attr_accessor :set_current_move, :current_move
+  attr_reader :specie, :type, :base_exp, :growth_rate, :base_stats, :effort_points, :moves, :stats, :name, :level, :hp, :set_current_move, :current_move
 
   def initialize(specie, level, name = nil)
     # Retrieve pokemon info from Pokedex and set instance variables
@@ -21,7 +21,9 @@ class Pokemon
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 } #variable
     @experience_points = initialize_experience_points(@level)
     @stats = { hp: calculate_hp, attack: calculate_else("attack"), defense: calculate_else("defense"), special_attack: calculate_else("special_attack"), special_defense: calculate_else("special_defense"), speed: calculate_else("speed") }
+    @current_move = nil
   end
+
 
   def initialize_pokedex_variables(specie)
     pokemon_specie = POKEMONS[specie]
@@ -67,7 +69,7 @@ class Pokemon
     @hp -= damage
   end
 
-  def set_current_move(name_player, move_player)
+  def set_current_move(move_player)
     @current_move = move_player
   end
 

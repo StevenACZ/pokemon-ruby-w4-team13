@@ -4,55 +4,68 @@ require_relative "pokedex"
 class Battle
   include Pokedex
 
-  def initialize(player1, player2)
+  def initialize(player1, bot)
     @player1 = player1
-    @player2 = player2
+    @bot = bot
     @pokemon1 = @player1.pokemon
-    @pokemon2 = @player2.pokemon
-
-    p @pokemon1
-    puts
-    p @pokemon2
+    @pokemon2 = @bot.pokemon
   end
 
   def start
     @pokemon1.prepare_for_battle
     @pokemon2.prepare_for_battle
 
-    puts "#{@player2.name} sent out #{@pokemon2.name}!"
+    puts "#{@bot.name} sent out #{@pokemon2.name}!"
     puts "#{@player1.name} sent out #{@pokemon1.name}!"
     puts "-------------------Battle Start!-------------------\n\n"
     until @pokemon1.fainted? || @pokemon2.fainted?
       puts "#{@player1.name}'s #{@pokemon1.name} - Level #{@pokemon1.level}"
       puts "HP: #{@pokemon1.hp}"
-      puts "#{@player2.name}'s #{@pokemon2.name} - Level #{@pokemon2.level}"
+      puts "#{@bot.name}'s #{@pokemon2.name} - Level #{@pokemon2.level}"
       puts "HP: #{@pokemon2.hp}\n\n"
       puts "#{@player1.name}, select your move:\n\n"
-      @player1.select_move
+      move1 = @player1.select_move
+      move2 = @bot.select_move
+      @pokemon1.set_current_move(move1)
+      @pokemon2.set_current_move(move2)
+      first = attack_order(@pokemon1, @pokemon2)
+      second = first == @pokemon1 ? @pokemon2 : @pokemon1
       puts "\n--------------------------------------------------"
+      first.attack(second)
+      puts "\n--------------------------------------------------"
+      second.attack(first) unless second.fainted?
+      puts "\n--------------------------------------------------"
+      next unless first.fainted?
     end
+    @winner = @pokemon1.fainted? ? @pokemon2 : @pokemon1
+    @loser = @winner == @pokemon1 ? @pokemon2 : @pokemon1
+    puts "#{@loser.name} FAINTED!"
+    puts "\n--------------------------------------------------"
+    puts "#{@winner.name} WINS!"
+    if @winner == @pokemon1
+      @winner.increase_stats(@pokemon2)
+    end
+    puts "\n-------------------Battle Ended!-------------------"
+  end
 
-    # Prepare the Battle (print messages and prepare pokemons)
-
-    # Until one pokemon faints
-    # --Print Battle Status
-    # --Both players select their moves
-
-    # --Calculate which go first and which second
-
-    # --First attack second
-    # --If second is fainted, print fainted message
-    # --If second not fainted, second attack first
-    # --If first is fainted, print fainted message
-
-    # Check which player won and print messages
-    # If the winner is the Player increase pokemon stats
+  def attack_order(pokemon1, pokemon2)
+    priority1 = MOVES[pokemon1.current_move][:priority]
+    priority2 = MOVES[pokemon2.current_move][:priority]
+    if priority1 != priority2
+      compare = priority1 <=> priority2
+    else
+      compare = pokemon1.stats[:speed] <=> pokemon2.stats[:speed]
+    end
+    case compare
+    when -1 then pokemon2
+    when 1 then pokemon1
+    when 0 then [pokemon1, pokemon2].sample
+    end
   end
 end
 
-# player1 = Player.new("Steven", "Bulbasaur", "CapiGrass")
+player1 = Player.new("Steven", "Charmander", "Char")
+bot = Bot.new("Bulbasaur", rand(1..5))
 
-# bot = Bot.new("Bulbasaur", rand(6))
-
-# battle = Battle.new(player1, bot)
-# battle.start
+battle = Battle.new(player1, bot)
+battle.start
