@@ -18,7 +18,8 @@ end
 # Create a class Bot that inherits from Player and override the select_move method
 class Bot < Player
   def initialize(specie, level)
-    super("Random Person", specie, specie, level)
+    bot_name = ["Wens", "Diego", "Rubocop", "Deyvi", "Jordi", "Ximena", "Andre", "Juanca", "Steven"].sample
+    super(bot_name, specie, specie, level)
   end
 
   def select_move
