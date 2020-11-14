@@ -4,11 +4,14 @@ require_relative "pokedex"
 class Battle
   include Pokedex
 
+  attr_reader :winner_pokemon
+
   def initialize(player1, bot)
     @player1 = player1
     @bot = bot
     @pokemon1 = @player1.pokemon
     @pokemon2 = @bot.pokemon
+    @winner_pokemon = nil
   end
 
   def start
@@ -39,6 +42,7 @@ class Battle
     end
     @winner = @pokemon1.fainted? ? @pokemon2 : @pokemon1
     @loser = @winner == @pokemon1 ? @pokemon2 : @pokemon1
+    @winner_pokemon = @winner
     puts "#{@loser.name} FAINTED!"
     puts "\n--------------------------------------------------"
     puts "#{@winner.name} WINS!"
@@ -63,9 +67,3 @@ class Battle
     end
   end
 end
-
-player1 = Player.new("Steven", "Charmander", "Char")
-bot = Bot.new("Bulbasaur", rand(1..5))
-
-battle = Battle.new(player1, bot)
-battle.start
